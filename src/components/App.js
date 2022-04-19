@@ -13,7 +13,7 @@ function App() {
     const [isEditAvatarPopupOpen, setEditAvatarPopupState] = useState(false);
     const [isDeletePopupOpen, setDeletePopupState] = useState(false);
     const [isImagePopupOpen, setImagePopupState] = useState(false);
-    const [selectedCard, setSelectedCard] = useState({link:''});
+    const [selectedCard, setSelectedCard] = useState({link:'1'});
     const handleEditAvatarClick = () => {
         setEditAvatarPopupState(true);
     }
