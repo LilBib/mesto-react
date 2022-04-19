@@ -6,7 +6,8 @@ function Main (props) {
     const [userName,setUserName] = useState('')
     const [userDescription, setUserDescription] = useState('')
     const [userAvatar, setUserAvatar] = useState('')
-    const [cards, setCards] = useState([])
+    const [cards, setCards] = useState([]);
+    
     React.useEffect(()=> {
         api.getUserInfo().then((res)=> {
             setUserName(res.name)
@@ -17,6 +18,7 @@ function Main (props) {
             setCards(res);
         })
     },[])
+
     return (
         <main>
             <section className="profile">

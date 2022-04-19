@@ -5,6 +5,7 @@ function PopupWithForm (props) {
         if(props.isOpen){window.addEventListener('keydown', props.onClose)}
         return(()=>{window.removeEventListener('keydown', props.onClose)})
     }, [props.isOpen])
+    
     return (
         <div className={`popup popup_assignment_${props.name} ${props.isOpen?'popup_opened':''}`} onClick={props.onClose} >
             <div className="popup__container">

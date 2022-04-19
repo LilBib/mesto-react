@@ -42,7 +42,9 @@ function App() {
     }
   return (
     <div className="page">
+        
         <Header/>
+
         <Main 
         onCardClick={handleCardClick} 
         onEditProfile={handleEditProfileClick} 
@@ -50,8 +52,11 @@ function App() {
         onAddPlace={handleAddPlaceClick} 
         onDeleteButton={handleDeleteButtonClick}
         />
-        <Footer/>        
-        <ImagePopup card={selectedCard} isOpen={isImagePopupOpen} onClose={closeAllPopups}/>
+
+        <Footer />    
+
+        <ImagePopup card={selectedCard} isOpen={isImagePopupOpen} onClose={closeAllPopups} />
+
         <PopupWithForm 
         name='edit' 
         title='Редактировать профиль' 
@@ -64,6 +69,7 @@ function App() {
             <input id="profile-description" name="description" minLength="2" maxLength="200" placeholder="Описание профиля" required type="text" className="form__item form__item_section_description"/>
             <span className="profile-description-error form__item-error"></span>
         </PopupWithForm>
+
         <PopupWithForm 
         name='add' 
         title='Новое место' 
@@ -76,6 +82,7 @@ function App() {
             <input id="place-link-input" name="link" required placeholder="Ссылка на картинку" type="url" className="form__item form__item_section_link"/>
             <span className="place-link-input-error form__item-error"></span>
         </PopupWithForm>
+
         <PopupWithForm 
         name='delete' 
         title='Вы уверены?' 
@@ -83,6 +90,7 @@ function App() {
         isOpen={isDeletePopupOpen} 
         onClose={closeAllPopups} 
         />
+
         <PopupWithForm 
         name='avatar-edit' 
         title='Обновить Аватар' 
@@ -93,6 +101,7 @@ function App() {
             <input id="avatar-link-input" name="link" required placeholder="Ссылка на картинку" type="url" className="form__item form__item_section_link"/>
             <span className="avatar-link-input-error form__item-error"></span>
         </PopupWithForm>
+
     </div>
   );
 }
