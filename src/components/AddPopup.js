@@ -16,10 +16,13 @@ function AddPopup(props) {
     function handleSubmit (e) {
         e.preventDefault();
         props.onAddCard(name, link);
-        props.onClose(e);
+    }
+
+    React.useEffect(() => {
         setName('');
         setLink('');
-    }
+    }, [props.isOpen]);
+
 
     return (
         <PopupWithForm 
@@ -30,9 +33,9 @@ function AddPopup(props) {
         onClose={props.onClose}
         onSubmit={handleSubmit}
         >
-            <input id="place-title-input" minLength="2" maxLength="30" name="place" required  placeholder="Название" type="text" className="form__item form__item_section_place" onChange={handleNameChange} />
+            <input id="place-title-input" minLength="2" maxLength="30" name="place" required  placeholder="Название" type="text" className="form__item form__item_section_place" value={name} onChange={handleNameChange} />
             <span className="place-title-input-error form__item-error"></span>
-            <input id="place-link-input" name="link" required placeholder="Ссылка на картинку" type="url" className="form__item form__item_section_link" onChange={handleLinkChange} />
+            <input id="place-link-input" name="link" required placeholder="Ссылка на картинку" type="url" className="form__item form__item_section_link" value={link} onChange={handleLinkChange} />
             <span className="place-link-input-error form__item-error"></span>
         </PopupWithForm>
     )

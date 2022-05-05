@@ -23,13 +23,13 @@ function App() {
     const [cards, setCards] = useState([]);
 
     React.useEffect(()=> {
-        api.getUserInfo().then(res=>setCurrentUser(res))
+        api.getUserInfo().then(res=>setCurrentUser(res)).catch(err=>console.log(err))
     },[isEditAvatarPopupOpen])
 
     React.useEffect(()=> {
         api.getInitialCards().then((res)=>{
             setCards(res);
-        })
+        }).catch(err=>console.log(err))
     },[])
     const deleteCard = useCallback( (card) => {
         const isOwner = card.owner._id===currentUser._id;
@@ -37,7 +37,7 @@ function App() {
         if (isOwner) {
             api.deleteCard(card._id).then(()=>{
                 setCards((cards) => cards.filter((c) => c._id !== card._id));
-            })
+            }).catch(err=>console.log(err))
         }
     },[currentUser._id])
 
@@ -46,12 +46,12 @@ function App() {
         if (!isLiked) {
             api.like(card._id).then((newCard) => {
                 setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
-            })
+            }).catch(err=>console.log(err))
         }
         else {
             api.unlike(card._id).then((newCard) => {
                 setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
-            })
+            }).catch(err=>console.log(err))
         }
     }
     const handleEditAvatarClick = () => {
@@ -73,16 +73,16 @@ function App() {
     const handleUpdateUser = (name, description) => {
         api.patchUserInfo(name, description).then((res)=>{
             setCurrentUser(res);
-        })
+        }).then(closeAllPopups).catch(err=>console.log(err))
     }
 
     const handleUpdateAvatar = (link) => {
-        api.patchAvatarInfo(link);
-        api.getUserInfo().then(res=>setCurrentUser(res));
+        api.patchAvatarInfo(link).catch(err=>console.log(err));
+        api.getUserInfo().then(res=>setCurrentUser(res)).then(closeAllPopups).catch(err=>console.log(err));
     }
 
     const handleAddCard = (name, link)=> {
-        api.postNewCard(name, link).then(newCard=>setCards([newCard, ...cards]))
+        api.postNewCard(name, link).then(newCard=>setCards([newCard, ...cards])).then(closeAllPopups).catch(err=>console.log(err));
     }
 
     const closeAllPopups = (evt) => {
@@ -129,9 +129,6 @@ function App() {
         isOpen={isDeletePopupOpen} 
         onClose={closeAllPopups} 
         />
-
-        
-
     </div>
     </CurrentUserContext.Provider>
   );
