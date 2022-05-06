@@ -92,7 +92,7 @@ function App() {
             setEditAvatarPopupState(false);
             setEditProfilePopupState(false);
             setImagePopupState(false);
-            setSelectedCard('');
+            setSelectedCard({link:'1'});
         }
     }
   return (

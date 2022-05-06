@@ -1,8 +1,10 @@
 import React from "react";
+import errorImg from '../images/imgonerror.png'
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Card ({ card, onClick, onLikeClick, onDeleteClick }) {
     const currentUser=React.useContext(CurrentUserContext);
+    const imgRef=React.useRef();
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     const isOwner = card.owner._id === currentUser._id;
     function handleCardClick (evt) {
@@ -15,10 +17,13 @@ function Card ({ card, onClick, onLikeClick, onDeleteClick }) {
     function handleDeleteButtonClick () {
         onDeleteClick(card);
     }
+    const handleError = () => {
+        imgRef.current.src=errorImg
+    }
     
     return(
         <div className="element" onClick={handleCardClick}>
-            <div style={{ backgroundImage: `url(${card.link})` }} className="element__card" />
+            <img ref={imgRef} src={card.link || errorImg} alt={card.name} onError={handleError} className="element__card" />
             <div className="element__content">
                 <h2 className="element__description">{card.name}</h2>
                 <div className="element__like-column" onClick={handleLikeClick}>
