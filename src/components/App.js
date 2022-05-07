@@ -85,15 +85,13 @@ function App() {
         api.postNewCard(name, link).then(newCard=>setCards([newCard, ...cards])).then(closeAllPopups).catch(err=>console.log(err));
     }
 
-    const closeAllPopups = (evt) => {
-        if (evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close-icon') || (evt.key ==='Escape') || evt.target.classList.contains('form__button')) {
+    const closeAllPopups = () => {
             setAddPopupState(false);
             setDeletePopupState(false);
             setEditAvatarPopupState(false);
             setEditProfilePopupState(false);
             setImagePopupState(false);
             setSelectedCard({link:'1'});
-        }
     }
   return (
     <CurrentUserContext.Provider value={currentUser}>
