@@ -6,10 +6,11 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPopup from "./AddPopup";
 import ImagePopup from "./ImagePopup";
+import Login from "./Login";
 import { api } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import React, { useState, useCallback } from "react";
-
+import { Route, Routes } from 'react-router-dom';
 
 
 function App() {
@@ -94,21 +95,43 @@ function App() {
             setSelectedCard({link:'1'});
     }
   return (
+    
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
         
-        <Header/>
+        
 
-        <Main 
-        onCardClick={handleCardClick} 
-        onEditProfile={handleEditProfileClick} 
-        onEditAvatar={handleEditAvatarClick} 
-        onAddPlace={handleAddPlaceClick} 
-        onDeleteButton={handleDeleteButtonClick}
-        cards={cards}
-        onCardLike={handleCardLike}
-        onCardDelete={deleteCard}
-        />
+        <Routes>
+
+        <Route path="/" element={<Header path={"/"}/>}>            
+        </Route>
+        <Route path="/sign-up" element={<Header path={"/sign-up"}/>}>            
+        </Route>
+        <Route path="/sign-in" element={<Header path={"/sign-in"}/>}>            
+        </Route>
+
+        <Route path="/" element={
+            <Main 
+            onCardClick={handleCardClick} 
+            onEditProfile={handleEditProfileClick} 
+            onEditAvatar={handleEditAvatarClick} 
+            onAddPlace={handleAddPlaceClick} 
+            onDeleteButton={handleDeleteButtonClick}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDelete={deleteCard}
+            /> 
+        }>
+        </Route>
+
+        <Route path="/sign-up">
+
+        </Route>
+        <Route path="/sign-in" element={<Login />}>
+        </Route>
+
+        </Routes>
+
 
         <Footer />    
 
