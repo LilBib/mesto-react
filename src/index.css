@@ -43,3 +43,7 @@
 @import url(./blocks/popup/__container/_assignment/_card/popup__container_assignment_card.css);
 @import url(./blocks/popup/__close-icon/popup__close-icon.css);
 @import url(./blocks/popup/__caption/popup__caption.css);
+@import url(./blocks/form/__title/_theme/_black/form__title_theme_black.css);
+@import url(./blocks/form/__item/_theme/_black/form__item_theme_black.css);
+@import url(./blocks/form/__button/_theme/_black/form__button_theme_black.css);
+@import url(./blocks/form/__reg-link/form__reg-link.css);

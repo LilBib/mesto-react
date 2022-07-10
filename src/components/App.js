@@ -11,6 +11,7 @@ import { api } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import React, { useState, useCallback } from "react";
 import { Route, Routes } from 'react-router-dom';
+import Register from "./Register";
 
 
 function App() {
@@ -103,37 +104,38 @@ function App() {
 
         <Routes>
 
-        <Route path="/" element={<Header path={"/"}/>}>            
-        </Route>
-        <Route path="/sign-up" element={<Header path={"/sign-up"}/>}>            
-        </Route>
-        <Route path="/sign-in" element={<Header path={"/sign-in"}/>}>            
-        </Route>
-
         <Route path="/" element={
-            <Main 
-            onCardClick={handleCardClick} 
-            onEditProfile={handleEditProfileClick} 
-            onEditAvatar={handleEditAvatarClick} 
-            onAddPlace={handleAddPlaceClick} 
-            onDeleteButton={handleDeleteButtonClick}
-            cards={cards}
-            onCardLike={handleCardLike}
-            onCardDelete={deleteCard}
-            /> 
+            <>
+                <Header path={"/"}/>
+                <Main 
+                    onCardClick={handleCardClick} 
+                    onEditProfile={handleEditProfileClick} 
+                    onEditAvatar={handleEditAvatarClick} 
+                    onAddPlace={handleAddPlaceClick} 
+                    onDeleteButton={handleDeleteButtonClick}
+                    cards={cards}
+                    onCardLike={handleCardLike}
+                    onCardDelete={deleteCard}
+                />  
+                <Footer />
+            </>
+    }>            
+        </Route>
+        <Route path="/sign-up" element={
+            <>
+                <Header path={"/sign-up"}/>
+                <Register />
+            </>
+        }>            
+        </Route>
+        <Route path="/sign-in" element={
+            <>
+            <Header path={"/sign-in"}/>
+            <Login />
+            </>
         }>
         </Route>
-
-        <Route path="/sign-up">
-
-        </Route>
-        <Route path="/sign-in" element={<Login />}>
-        </Route>
-
         </Routes>
-
-
-        <Footer />    
 
         <ImagePopup card={selectedCard} isOpen={isImagePopupOpen} onClose={closeAllPopups} />
 
