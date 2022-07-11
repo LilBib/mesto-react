@@ -2,6 +2,7 @@ export class Api {
     constructor(options) {
         this._baseURL = options.baseURL;
         this._headers = options.headers;
+        this._baseAuthURL = options.baseAuthURL;
     }
 
     _checkResponse(res) {
@@ -82,11 +83,48 @@ export class Api {
             headers: this._headers
         }).then(this._checkResponse)
     }
+
+    signup(password, email) {
+        return fetch(`${this._baseAuthURL}/signup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify({
+                "password": `${password}`,
+                "email": `${email}`
+            })
+        }).then(this._checkResponse)
+    }
+    signin(password, email) {
+        return fetch(`${this._baseAuthURL}/signin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify({
+                "password": `${password}`,
+                "email": `${email}`
+            })
+        }).then(this._checkResponse)
+    }
+
+    checkToken() {
+        return fetch(`${this._baseAuthURL}/users/me`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization" : `Bearer ${localStorage.getItem('jwt')}`
+              }
+        }).then(this._checkResponse)
+    }
+
 }
 export const api = new Api({
     baseURL: 'https://mesto.nomoreparties.co/v1/cohort36',
     headers: {
       authorization: 'a4b67e43-7921-4ffc-97a3-90eb387a74ab',
       'Content-Type': 'application/json'
-    }
+    },
+    baseAuthURL: 'https://auth.nomoreparties.co'
   });

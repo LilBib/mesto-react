@@ -6,7 +6,9 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPopup from "./AddPopup";
 import ImagePopup from "./ImagePopup";
+import InfoToolTip from "./InfoToolTip";
 import Login from "./Login";
+import ProtectedRoute from "./ProtectedRoute";
 import { api } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import React, { useState, useCallback } from "react";
@@ -20,9 +22,19 @@ function App() {
     const [isEditAvatarPopupOpen, setEditAvatarPopupState] = useState(false);
     const [isDeletePopupOpen, setDeletePopupState] = useState(false);
     const [isImagePopupOpen, setImagePopupState] = useState(false);
+    const [isInfoToolTipPopupOpen, setInfoToolTipPopupState] = useState(false);
+    const [isSignUpSucceed, setSignUpSuccessState] = useState(true);
+    const [currentUserEmail, setCurrentUserEmail] = useState('example@yandex.com');
+    const [isLoggedIn, setLogInState] = useState (true);
     const [selectedCard, setSelectedCard] = useState({link:'1'});
     const [currentUser, setCurrentUser] = useState({});
     const [cards, setCards] = useState([]);
+
+    React.useEffect(()=> {
+        if (localStorage.getItem('jwt')) {
+            api.checkToken().then((data)=>{setCurrentUser({_id : `${data._id}`}); setCurrentUserEmail(data.email); setLogInState(true)}).catch((err)=>{console.log(err); setCurrentUser({_id : ` `}); setCurrentUserEmail(' '); setLogInState(false)})
+        }
+    },[])
 
     React.useEffect(()=> {
         api.getUserInfo().then(res=>setCurrentUser(res)).catch(err=>console.log(err))
@@ -87,55 +99,65 @@ function App() {
         api.postNewCard(name, link).then(newCard=>setCards([newCard, ...cards])).then(closeAllPopups).catch(err=>console.log(err));
     }
 
+    const handleSignUp = (password, email) => {
+        api.signup(password, email).then(()=>{ setSignUpSuccessState(true); setInfoToolTipPopupState(true)}).catch((err)=>{console.log(err);setSignUpSuccessState(false); setInfoToolTipPopupState(true)})
+    }
+    const handleSignIn = (password, email) => {
+        api.signin(password, email).then((data)=>{localStorage.setItem('jwt', data.token); setLogInState(true); setCurrentUserEmail(email)}).catch(err=>console.log(err))
+    }
+
+    const handleLogOut = () => {
+        localStorage.removeItem('jwt');
+        setCurrentUser({_id:''});
+        setCurrentUserEmail('');
+        setLogInState(false);
+    }
+
     const closeAllPopups = () => {
             setAddPopupState(false);
             setDeletePopupState(false);
             setEditAvatarPopupState(false);
             setEditProfilePopupState(false);
             setImagePopupState(false);
+            setInfoToolTipPopupState(false);
             setSelectedCard({link:'1'});
     }
   return (
     
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
-        
-        
-
         <Routes>
-
-        <Route path="/" element={
-            <>
-                <Header path={"/"}/>
-                <Main 
-                    onCardClick={handleCardClick} 
-                    onEditProfile={handleEditProfileClick} 
-                    onEditAvatar={handleEditAvatarClick} 
-                    onAddPlace={handleAddPlaceClick} 
-                    onDeleteButton={handleDeleteButtonClick}
-                    cards={cards}
-                    onCardLike={handleCardLike}
-                    onCardDelete={deleteCard}
-                />  
-                <Footer />
-            </>
-    }>            
-        </Route>
         <Route path="/sign-up" element={
             <>
                 <Header path={"/sign-up"}/>
-                <Register />
+                <Register onSignUp={handleSignUp} />
             </>
         }>            
         </Route>
         <Route path="/sign-in" element={
             <>
             <Header path={"/sign-in"}/>
-            <Login />
+            <Login onLogin={handleSignIn} />
             </>
         }>
         </Route>
         </Routes>
+        <ProtectedRoute path="/" loggedIn={isLoggedIn}>
+            <>
+            <Header path={"/"} email={currentUserEmail} onLogOut={handleLogOut}/>
+            <Main 
+                onCardClick={handleCardClick} 
+                onEditProfile={handleEditProfileClick} 
+                onEditAvatar={handleEditAvatarClick} 
+                onAddPlace={handleAddPlaceClick} 
+                onDeleteButton={handleDeleteButtonClick}
+                cards={cards}
+                onCardLike={handleCardLike}
+                onCardDelete={deleteCard}
+            />  
+            <Footer />
+            </>
+        </ProtectedRoute>
 
         <ImagePopup card={selectedCard} isOpen={isImagePopupOpen} onClose={closeAllPopups} />
 
@@ -152,6 +174,8 @@ function App() {
         isOpen={isDeletePopupOpen} 
         onClose={closeAllPopups} 
         />
+
+        <InfoToolTip isSucceed={isSignUpSucceed} name='info-tool-tip' isOpen={isInfoToolTipPopupOpen} onClose={closeAllPopups} />
     </div>
     </CurrentUserContext.Provider>
   );
